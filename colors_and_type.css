@@ -1,0 +1,140 @@
+/* ─────────────────────────────────────────────────────────────
+   Witty Design System — Colors & Type
+   Uitgelezen uit Figma "Tekst bouwblokken"
+   ───────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap');
+
+/* Atkinson Hyperlegible Next — lokaal, alle gewichten */
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: normal; font-weight: 200; src: url('fonts/AtkinsonHyperlegibleNext-ExtraLight.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: italic; font-weight: 200; src: url('fonts/AtkinsonHyperlegibleNext-ExtraLightItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: normal; font-weight: 300; src: url('fonts/AtkinsonHyperlegibleNext-Light.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: italic; font-weight: 300; src: url('fonts/AtkinsonHyperlegibleNext-LightItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: normal; font-weight: 400; src: url('fonts/AtkinsonHyperlegibleNext-Regular.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: italic; font-weight: 400; src: url('fonts/AtkinsonHyperlegibleNext-Italic.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: normal; font-weight: 500; src: url('fonts/AtkinsonHyperlegibleNext-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: italic; font-weight: 500; src: url('fonts/AtkinsonHyperlegibleNext-MediumItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: normal; font-weight: 600; src: url('fonts/AtkinsonHyperlegibleNext-SemiBold.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: italic; font-weight: 600; src: url('fonts/AtkinsonHyperlegibleNext-SemiBoldItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: normal; font-weight: 700; src: url('fonts/AtkinsonHyperlegibleNext-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: italic; font-weight: 700; src: url('fonts/AtkinsonHyperlegibleNext-BoldItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: normal; font-weight: 800; src: url('fonts/AtkinsonHyperlegibleNext-ExtraBold.ttf') format('truetype'); }
+@font-face { font-family: 'Atkinson Hyperlegible Next'; font-style: italic; font-weight: 800; src: url('fonts/AtkinsonHyperlegibleNext-ExtraBoldItalic.ttf') format('truetype'); }
+
+:root {
+  /* ── Font families ──────────────────────────────────────── */
+  /* Lexend = display/headings. Atkinson Hyperlegible = leesbaar body font
+     (Atkinson Hyperlegible "Next" in Figma; Google Fonts heeft alleen
+     de basisvariant — nabije match, zelfde familie/maker). */
+  --font-display: 'Lexend', system-ui, -apple-system, sans-serif;
+  --font-body: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, sans-serif;
+
+  /* ── Base colors ────────────────────────────────────────── */
+  --ink:            #0F1012;   /* primaire tekst */
+  --ink-muted:      #3D4148;   /* body / secundair */
+  --divider:        #D0D5DD;   /* lijntjes onder titel */
+  --white:          #FFFFFF;
+
+  /* ── Button/option radius (globaal instelbaar) ─────────── */
+  /* "geen" → 0, "klein" → 8 (default), "groot" → 999 (pil) */
+  --wt-radius: 8px;
+
+  /* Witty teal — primaire brand color (uit Figma metadata, 16× gebruikt) */
+  --teal-900:       #1F4F4C;   /* donker thema achtergrond */
+  --teal-700:       #2E6D68;
+  --teal-600:       #37837D;   /* brand accent */
+  --teal-50:        #F4FBFA;   /* branded light achtergrond */
+
+  /* Neutrals */
+  --neutral-50:     #F9FAFB;   /* neutral light achtergrond */
+  --neutral-100:    #F2F4F7;
+  --neutral-200:    #E4E7EC;
+  --neutral-500:    #667085;
+
+  /* ── Block backgrounds (semantic) ───────────────────────── */
+  --bg-standaard:   var(--white);
+  --bg-licht:       var(--teal-50);
+  --bg-donker:      var(--teal-900);
+  --bg-neutral:     var(--neutral-50);
+
+  /* ── Foreground-per-achtergrond ─────────────────────────── */
+  --fg-on-standaard-title:    var(--ink);
+  --fg-on-standaard-body:     var(--ink-muted);
+  --fg-on-standaard-divider:  var(--divider);
+
+  --fg-on-licht-title:        var(--ink);
+  --fg-on-licht-body:         var(--ink-muted);
+  --fg-on-licht-divider:      var(--divider);
+
+  --fg-on-donker-title:       var(--white);
+  --fg-on-donker-body:        rgba(255,255,255,0.82);
+  --fg-on-donker-divider:     rgba(255,255,255,0.70);
+
+  --fg-on-neutral-title:      var(--ink);
+  --fg-on-neutral-body:       var(--ink-muted);
+  --fg-on-neutral-divider:    var(--divider);
+
+  /* ── Type scale (desktop, uit Figma) ────────────────────── */
+  --type-title-size:      36px;
+  --type-title-lh:        44px;
+  --type-title-weight:    700;
+
+  --type-subtitle-size:   20px;
+  --type-subtitle-lh:     24px;
+  --type-subtitle-weight: 700;
+
+  --type-body-size:       16px;
+  --type-body-lh:         24px;
+  --type-body-weight:     400;
+
+  /* Mobiel variant */
+  --type-title-size-m:    24px;
+  --type-title-lh-m:      32px;
+
+  /* ── Spacing / layout ───────────────────────────────────── */
+  --block-pad-y:          96px;  /* Figma: 96px top/bottom desktop */
+  --block-pad-y-mobile:   64px;
+  --block-pad-x:          112px; /* Figma: 112px horizontal desktop */
+  --block-pad-x-mobile:   16px;
+
+  --content-gap:          32px;  /* gap tussen heading-block en body */
+  --content-gap-mobile:   24px;
+  --two-col-gap:          136px; /* gap tussen kolommen desktop */
+  --body-inner-gap:       12px;  /* subtitel → body */
+
+  --divider-width:        80px;
+  --divider-height:       1px;
+
+  --content-max-width:    488px; /* text column */
+  --media-width:          704px; /* full media (media links/rechts) */
+  --media-width-boxed:    592px; /* met padding */
+
+  --radius-media:         0px;   /* media in-block: geen radius */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Semantic typography classes
+   Gebruik: <h2 class="wt-block-title">…</h2>
+   ───────────────────────────────────────────────────────────── */
+.wt-block-title {
+  font-family: var(--font-display);
+  font-weight: var(--type-title-weight);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-lh);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.wt-subtitle {
+  font-family: var(--font-body);
+  font-weight: var(--type-subtitle-weight);
+  font-size: var(--type-subtitle-size);
+  line-height: var(--type-subtitle-lh);
+  margin: 0;
+}
+.wt-body {
+  font-family: var(--font-body);
+  font-weight: var(--type-body-weight);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-lh);
+  margin: 0;
+}
