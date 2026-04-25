@@ -16,8 +16,7 @@ Genereer een complete Witty-les als één HTML-**artifact** (content type `text/
 ## Wanneer activeren
 
 Triggers:
-- Gebruiker vraagt om "een Witty-les", "lesson maken", "onderwijsles", "les-HTML met Witty", "les-artifact".
-- Gebruiker beschrijft een leer-onderwerp en wil het als gestructureerde les krijgen.
+- Gebruiker vraagt om "een Witty-les", "les maken met Witty", "les met Witty"
 
 Niet activeren voor: algemene uitleg over onderwijs, losse bouwblokken zonder lescontext, of ongerelateerde HTML-artifacts.
 
@@ -25,17 +24,38 @@ Niet activeren voor: algemene uitleg over onderwijs, losse bouwblokken zonder le
 
 1. **Korte interview** (1 bericht, maximaal 3 vragen tegelijk):
    - Onderwerp (vrije tekst).
-   - Doelgroep: basisonderwijs / voortgezet onderwijs / MBO / HBO.
+   - Doelgroep: MBO-4
    - Doel: kennismaken / verdiepen / oefenen / afsluiten.
    - Optioneel: gewenste lengte (kort / standaard / lang — default standaard).
 
-2. **Kies een recept** uit *Pedagogische recepten*. Respecteer de *Lengteguardrails*.
+2. **Kies een template** uit Templates. Respecteer de *Lengteguardrails*.
 
-3. **Schrijf copy** per blok — zie *NL tone & copy-regels*. Geen lorem, geen placeholders.
+3. Gebruik de 'Ontwerpmodellen voor educatieve content' om de content te vormen 
 
-4. **Genereer het artifact** volgens het skeleton. Gebruik `application/vnd.ant.html` als artifact-type. Titel van het artifact: `Witty — <lestitel>`.
+4. **Schrijf copy** per blok — zie *NL taal & copy-regels*. Geen lorem, geen placeholders.
 
-5. **Rapporteer** terug (onder het artifact): gekozen blokken in volgorde, 1-zin motivering per blok, eventuele open vragen voor de gebruiker.
+5. **Genereer het artifact** volgens het skeleton. Gebruik `application/vnd.ant.html` als artifact-type. Titel van het artifact: `Witty — <lestitel>`.
+
+6. **Rapporteer** terug (onder het artifact): gekozen blokken in volgorde, 1-zin motivering per blok, eventuele open vragen voor de gebruiker.
+
+
+
+## **Ontwerpmodellen voor educatieve content**
+
+- 4C/ID model, dit is de leidraad voor het ontwerp
+- 5 Moments of Need, aanvullend bij taakondersteuning
+- 12 Levers of Transfer, focus op de gewenste gedragsverandering
+
+Gedrags- en motivatielenzen
+
+- SUE / gedragsbeïnvloeding, hoe maken we het gewenste gedrag makkelijker, aantrekkelijker en logischer.
+- Breinleren, alleen evidence-informed, niet als neurohype
+
+Evaluatie
+
+- LTEM voor evaluatie, hoe voorkomen we dat we tevredenheid verwarren met effect
+
+
 
 ## Block catalog — content (7)
 
@@ -310,7 +330,7 @@ Minimaal 2 items. Placeholder asset mag herhaald met verschillende alt.
 }
 ```
 
-## Pedagogische recepten
+## Templates
 
 ### 0. Kort (3 blokken)
 `tekst (een-kolom) → stelling → quote`
@@ -329,10 +349,9 @@ Minimaal 2 items. Placeholder asset mag herhaald met verschillende alt.
 
 ### Compositieregels
 - Open **altijd** met `tekst` (oriëntatie).
-- Sluit **altijd** met reflectie (`poll` of `quote`).
 - Minstens één interactief blok.
-- Niet twee identieke kinds na elkaar.
-- Wissel achtergronden af: `standaard → licht → standaard → donker → standaard`. Donker max 1×.
+- Niet twee identieke soorten blokken na elkaar, tenzij de user om een examen/exam vraagt
+- Wissel achtergronden af: `standaard → licht → standaard → donker → standaard`. Donker max 2×.
 
 ## Lengteguardrails
 
@@ -342,27 +361,21 @@ Minimaal 2 items. Placeholder asset mag herhaald met verschillende alt.
 | standaard | 5–7 | 10–15 min |
 | lang | 8–10 | 20–30 min |
 
-Boven 10 blokken: splits in meerdere artifacts en meld dat aan de gebruiker.
-
-## NL tone & copy-regels
+## NL taal & copy-regels
 
 - **Taal**: Nederlands. Geen lorem.
+- **Taalniveau:** CEFR B1, tenzij de gebruiker anders vraagt
 - **Persoon**: `je`-vorm. Nooit `u`.
 - **Casing**: sentence case voor titels en subtitels.
 - **Toon**: rustig, instructief, neutraal. Geen uitroeptekens, geen emoji.
-- **Lengte**: titel ≤ 8 woorden, subtitel ≤ 6, body 2–4 zinnen. Stepper.body 3–5 zinnen per stap.
-- **Doelgroep-aanpassing**:
-  - BO (8–12j): korte zinnen, concrete voorbeelden, geen jargon.
-  - VO (12–18j): iets langere zinnen, jargon mag mits uitgelegd.
-  - MBO/HBO: beroepscontext, abstracte concepten mogen.
-- **Namen**: Annemarie Docter / Michel voor de bestaande avatars. Andere namen alleen zonder avatar.
+- **Lengte**: titel ≤ 8-12 woorden, subtitel ≤ 6, body 2–4 zinnen. Stepper.body 3–5 zinnen per stap.
+- **Doelgroep**: MBO-4: beroepscontext, abstracte concepten mogen.
+- **Namen**: Verzin namen voor de avatars, altijd voornaam en achternaam
 
 ## Toegankelijkheid
 
-- **Alt-teksten**: verplicht op elke `MediaCarousel.items[*].alt`. Beschrijvend, geen "foto van".
 - **Kleur niet als enige drager**: feedback combineert kleur + icon + tekst.
-- **Keyboard**: alle vraagblokken werken met keyboard (native `<button>`). Niet breken.
-- **Donker sparzaam**: max 1× per les, niet voor blokken met veel body-tekst.
+- **Gebruik donkere varianten spaarzaam**: max 2× per les, niet voor blokken met veel body-tekst.
 
 ## HTML skeleton (artifact)
 
