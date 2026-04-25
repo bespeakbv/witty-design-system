@@ -10,6 +10,24 @@ https://cdn.jsdelivr.net/npm/witty-design-system@1/
 
 `@1` resolves to the latest 1.x.x version (semver-range pin) — patches and minor updates propagate automatically; major bumps require explicit URL change.
 
+## Distribution chain
+
+```
+Local working copy: ~/Downloads/witty-design-system/
+   ↓  git push
+GitHub:    github.com/bespeakbv/witty-design-system   (source of truth)
+   ↓  npm publish
+NPM:       npmjs.com/package/witty-design-system     (registry, immutable versions)
+   ↓  automatic mirror
+jsDelivr:  cdn.jsdelivr.net/npm/witty-design-system@1/   (CDN, CSP-allowlisted)
+   ↓  HTTPS over CDN
+Claude artifact (end user)
+```
+
+GitHub Pages is **not** part of this chain — it was disabled as redundant. jsDelivr serves directly from the published NPM tarball.
+
+To update: edit locally → `git push` → `npm publish` (the `prepublishOnly` hook runs `./build-jsx.sh` automatically). Within ~10 minutes jsDelivr serves the new version under `@1`.
+
 ## Structure
 
 - `components/*.js` — 13 bouwblok-componenten (Tekst, Quote, Chat, Hotspot, Stepper, Vraag·*…) plus shared helpers, pre-compiled from JSX to plain JS via esbuild and IIFE-wrapped to keep top-level helpers from colliding.
