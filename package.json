@@ -1,6 +1,6 @@
 {
   "name": "witty-design-system",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Witty design system runtime — React bouwblokken, design tokens, fonts, and demo assets for the Witty lesson system. Hosted as an npm package so the witty-lessons skill artifacts can load shared runtime files via jsDelivr.",
   "license": "SEE LICENSE IN README.md",
   "author": "Bespeak BV (https://www.bespeak.nl/)",
@@ -27,6 +27,7 @@
     "app-main.js",
     "assets.js",
     "colors_and_type.css",
+    "colors_and_type_artifact.css",
     "fonts/",
     "assets/",
     "README.md"
