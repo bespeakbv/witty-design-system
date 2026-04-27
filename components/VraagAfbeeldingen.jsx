@@ -5,15 +5,15 @@
 function VraagAfbeeldingen({
   achtergrond = "standaard",
   eyebrow = "Vraag 3 of kop titel",
-  intro = "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-  titel = "Vestibulum placerat ipsum vel malesuada vehicula.",
+  intro = "",
+  titel = "",
   instructie = "Instructie",
   multi = false,
   opties = [
-    { tekst: "Lorem ipsum", afbeelding: "assets/vraag-img-1.jpg", correct: true },
-    { tekst: "Lorem ipsum", afbeelding: "assets/vraag-img-2.jpg", correct: false },
-    { tekst: "Lorem ipsum", afbeelding: "assets/vraag-img-1.jpg", correct: false },
-    { tekst: "Lorem ipsum", afbeelding: "assets/vraag-img-2.jpg", correct: false },
+    { tekst: "", afbeelding: "assets/vraag-img-1.jpg", correct: true },
+    { tekst: "", afbeelding: "assets/vraag-img-2.jpg", correct: false },
+    { tekst: "", afbeelding: "assets/vraag-img-1.jpg", correct: false },
+    { tekst: "", afbeelding: "assets/vraag-img-2.jpg", correct: false },
   ],
   toonFeedback = false,
 }) {

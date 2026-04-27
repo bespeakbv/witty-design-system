@@ -3,8 +3,8 @@
 function VraagStelling({
   achtergrond = "standaard",
   eyebrow = "Vraag 3 of kop titel",
-  intro = "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-  titel = "Vestibulum placerat ipsum vel malesuada vehicula.",
+  intro = "",
+  titel = "",
   instructie = "Instructie",
   juistIsJuist = true, // welk antwoord is correct
   labels = { juist: "Juist", onjuist: "Onjuist" },

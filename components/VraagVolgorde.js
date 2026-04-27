@@ -18,11 +18,11 @@ function shuffle(arr, seed = 1) {
 function VraagVolgorde({
   achtergrond = "standaard",
   eyebrow = "Vraag 3 of kop titel",
-  intro = "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
+  intro = "",
   titel = "Zet de stappen in de juiste volgorde.",
   instructie = "Instructie",
   opties = [
-    { tekst: "Stap \xE9\xE9n \u2014 Lorem ipsum dolor sit amet." },
+    { tekst: "" },
     { tekst: "Stap twee \u2014 Consectetur adipiscing elit." },
     { tekst: "Stap drie \u2014 Sed do eiusmod tempor incididunt." },
     { tekst: "Stap vier \u2014 Ut labore et dolore magna aliqua." }

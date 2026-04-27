@@ -2,15 +2,15 @@
 function VraagPoll({
   achtergrond = "neutral",
   eyebrow = "Vraag 3 of kop titel",
-  intro = "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-  titel = "Vestibulum placerat ipsum vel malesuada vehicula.",
+  intro = "",
+  titel = "",
   instructie = "Instructie",
   multi = false,
   opties = [
-    { tekst: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", stemmen: 42 },
-    { tekst: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", stemmen: 28 },
-    { tekst: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", stemmen: 18 },
-    { tekst: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", stemmen: 12 }
+    { tekst: "", stemmen: 42 },
+    { tekst: "", stemmen: 28 },
+    { tekst: "", stemmen: 18 },
+    { tekst: "", stemmen: 12 }
   ],
   toonFeedback = false
 }) {

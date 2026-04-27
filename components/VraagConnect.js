@@ -2,12 +2,12 @@
 function VraagConnect({
   achtergrond = "standaard",
   eyebrow = "Vraag 3 of kop titel",
-  intro = "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-  titel = "Vestibulum placerat ipsum vel malesuada vehicula.",
+  intro = "",
+  titel = "",
   instructie = "Instructie",
   metAfbeelding = false,
   paren = [
-    { links: "Begrip 1", rechts: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", afbeelding: "assets/vraag-img-1.jpg" },
+    { links: "Begrip 1", rechts: "", afbeelding: "assets/vraag-img-1.jpg" },
     { links: "Begrip 2", rechts: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.", afbeelding: "assets/vraag-img-2.jpg" },
     { links: "Begrip 3", rechts: "Duis aute irure dolor in reprehenderit in voluptate velit esse.", afbeelding: "assets/vraag-img-1.jpg" },
     { links: "Begrip 4", rechts: "Excepteur sint occaecat cupidatat non proident, sunt in culpa.", afbeelding: "assets/vraag-img-2.jpg" }
