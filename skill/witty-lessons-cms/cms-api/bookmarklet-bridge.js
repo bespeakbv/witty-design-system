@@ -48,8 +48,12 @@ try {
   return;
 }
 
+// Accept either {blocks: [...]} or a bare blocks array — both are valid exports.
+if (Array.isArray(__payload)) {
+  __payload = { blocks: __payload };
+}
 if (!__payload || !Array.isArray(__payload.blocks)) {
-  __wittyToast('Clipboard bevat geen geldig {blocks: [...]} object.', '#c0392b');
+  __wittyToast('Clipboard bevat geen blocks-array. Verwacht {blocks: [...]} of bare [...].', '#c0392b');
   return;
 }
 

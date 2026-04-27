@@ -30,7 +30,7 @@ Niet activeren voor: algemene uitleg over onderwijs, losse bouwblokken zonder le
 
 2. **Kies een template** uit Templates. Respecteer de *Lengteguardrails*.
 
-3. Gebruik de 'Ontwerpmodellen voor educatieve content' om de content te vormen 
+3. Gebruik de 'Ontwerpmodellen voor educatieve content' om de content te vormen. Vertel na de generatie wat je gebruikt heb en hoe.
 
 4. **Schrijf copy** per blok — zie *NL taal & copy-regels*. Geen lorem, geen placeholders.
 
@@ -96,6 +96,12 @@ Alle runtime-files staan op `https://cdn.jsdelivr.net/npm/witty-design-system@1/
 - `app.js`, `app-tweaks.js`, `app-main.js` — shell + tweaks panel runtime
 
 Refereer altijd met absolute URLs. Never use relative paths in the artifact — artifacts have no base URL context.
+
+### Cachebuster (verplicht)
+
+jsdelivr stuurt `cache-control: max-age=604800` (7 dagen). Zonder cachebuster blijft Chrome oude `.js`/`.css` versies serveren ook na een npm publish — namen, fixes en nieuwe features worden dan onzichtbaar in nieuw gegenereerde artifacts.
+
+**Regel**: append `?v={{CACHE_BUST}}` aan elke `cdn.jsdelivr.net/npm/witty-design-system@1/...` URL. **Vervang `{{CACHE_BUST}}` door de huidige `Date.now()`-waarde** (een 13-cijferig millisec-timestamp) op het moment dat je het artifact genereert. Gebruik **één identieke waarde** voor alle scripts in dezelfde artifact (zodat de browser ze binnen het artifact wél kan cachen).
 
 ## Images: gebruik `WITTY_ASSETS[...]`, nooit directe URLs
 
@@ -395,7 +401,7 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Witty — <!-- lestitel --></title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/witty-design-system@1/colors_and_type_artifact.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/witty-design-system@1/colors_and_type_artifact.css?v={{CACHE_BUST}}" />
   <style>
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -430,7 +436,7 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
       border-radius: 12px;
       box-shadow: 0 12px 32px rgba(16,24,40,0.16), 0 2px 6px rgba(16,24,40,0.08);
       font-family: var(--font-body); font-size: 13px; color: var(--ink);
-      z-index: 999; display: none;
+      z-index: 1001; display: none;
     }
     body.tweaks-on .tweaks { display: block; }
     .tweaks-header { padding: 12px 14px; border-bottom: 1px solid var(--neutral-200); display: flex; align-items: center; justify-content: space-between; }
@@ -513,23 +519,34 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
       var btn = document.getElementById("cms-export");
       if (!btn) return;
 
-      // Drop artifact-only fields and replace data:/blob: URIs with null
-      // (CMS expects assetId UUIDs; user uploads images manually after import).
-      function stripValue(v) {
+      // Replace data:/blob: URIs with null (CMS expects assetId UUIDs;
+      // user uploads images manually after import). Recursively cleans
+      // strings everywhere; does NOT strip object keys at this level —
+      // top-level artifact-only keys (id/naam) are dropped per-block below.
+      function cleanValue(v) {
         if (typeof v === "string") {
           if (v.startsWith("data:") || v.startsWith("blob:") || v.indexOf("claudeusercontent.com") !== -1) return null;
           return v;
         }
-        if (Array.isArray(v)) return v.map(stripValue);
+        if (Array.isArray(v)) return v.map(cleanValue);
         if (v && typeof v === "object") {
           var out = {};
-          for (var k in v) {
-            if (k === "id" || k === "naam") continue;  // artifact-only display fields
-            out[k] = stripValue(v[k]);
-          }
+          for (var k in v) out[k] = cleanValue(v[k]);
           return out;
         }
         return v;
+      }
+      // Strip artifact-only top-level fields. `id` and `naam` are display-only
+      // hooks for the tweaks panel; the CMS assigns its own UUIDs and ignores
+      // naam. Critically: only at TOP level — `personen[i].naam` (chat speakers)
+      // and other nested naam-like fields stay intact.
+      function stripValue(v) {
+        var cleaned = cleanValue(v);
+        if (cleaned && typeof cleaned === "object" && !Array.isArray(cleaned)) {
+          delete cleaned.id;
+          delete cleaned.naam;
+        }
+        return cleaned;
       }
 
       // Per-kind remap from artifact-shape to CMS-builder-shape.
@@ -552,6 +569,8 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
           // Build map auteur ("links"/"rechts") → persoonIndex.
           // Prefer authored personen[] (with names) when present, else fallback to
           // ordering by first-seen auteur in berichten with default names.
+          // Berichten may use either `auteur` (artifact-shape) or `persoonIndex`
+          // (CMS-shape, accepted as pass-through).
           var seen = {};
           var personen = [];
           if (Array.isArray(s.personen) && s.personen.length) {
@@ -561,7 +580,7 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
             });
           }
           (s.berichten || []).forEach(function (m) {
-            if (!(m.auteur in seen)) {
+            if (m.auteur && !(m.auteur in seen)) {
               seen[m.auteur] = personen.length;
               personen.push({ naam: "Persoon " + (personen.length + 1), positie: m.auteur });
             }
@@ -571,40 +590,145 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
             achtergrond: s.achtergrond,
             personen: personen,
             berichten: (s.berichten || []).map(function (m) {
-              return { tekst: m.tekst, titel: m.titel, persoonIndex: seen[m.auteur] };
+              var idx = (typeof m.persoonIndex === "number")
+                ? m.persoonIndex
+                : (m.auteur in seen ? seen[m.auteur] : 0);
+              return { tekst: m.tekst, titel: m.titel, persoonIndex: idx };
             }),
           };
         }
         return s;
       }
 
+      // Show modal-dialog with the JSON pre-selected. Used when navigator.clipboard
+      // is blocked by Permissions-Policy (claude.ai artifact iframes do this).
+      function showExportDialog(payload, summary) {
+        var existing = document.getElementById("cms-export-dialog");
+        if (existing) existing.remove();
+
+        var backdrop = document.createElement("div");
+        backdrop.id = "cms-export-dialog";
+        backdrop.style.cssText =
+          "position:fixed;inset:0;z-index:99999;background:rgba(16,24,40,0.5);" +
+          "display:flex;align-items:center;justify-content:center;padding:24px;" +
+          "font-family:var(--font-body),system-ui,sans-serif;";
+
+        var card = document.createElement("div");
+        card.style.cssText =
+          "background:#fff;border-radius:12px;padding:20px;max-width:680px;width:100%;" +
+          "max-height:80vh;display:flex;flex-direction:column;gap:12px;" +
+          "box-shadow:0 20px 60px rgba(16,24,40,0.3);";
+
+        var title = document.createElement("h3");
+        title.textContent = "Exporteer voor CMS";
+        title.style.cssText = "margin:0;font-size:18px;font-weight:700;color:var(--ink);";
+
+        var info = document.createElement("p");
+        info.textContent = summary + " — selecteer alles en kopieer (Cmd+A, Cmd+C), plak daarna in de LCMS-tab via de Witty-bookmarklet.";
+        info.style.cssText = "margin:0;font-size:13px;color:var(--ink-muted,#6B7280);line-height:1.5;";
+
+        var ta = document.createElement("textarea");
+        ta.value = payload;
+        ta.readOnly = true;
+        ta.style.cssText =
+          "flex:1;min-height:300px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;" +
+          "font-size:12px;border:1px solid var(--neutral-200,#E5E7EB);border-radius:8px;" +
+          "padding:12px;resize:vertical;width:100%;box-sizing:border-box;color:var(--ink);";
+
+        var actions = document.createElement("div");
+        actions.style.cssText = "display:flex;gap:8px;justify-content:flex-end;";
+
+        var copyBtn = document.createElement("button");
+        copyBtn.textContent = "Selecteer alles";
+        copyBtn.style.cssText =
+          "padding:8px 14px;border-radius:6px;border:1px solid var(--neutral-200,#E5E7EB);" +
+          "background:#fff;color:var(--ink);font-weight:600;font-size:13px;cursor:pointer;";
+        copyBtn.onclick = function () {
+          ta.focus();
+          ta.select();
+          // Try execCommand as a best-effort fallback (also restricted in some iframes).
+          try {
+            var ok = document.execCommand && document.execCommand("copy");
+            if (ok) {
+              copyBtn.textContent = "✓ Gekopieerd";
+              copyBtn.style.background = "var(--teal-600,#0D9488)";
+              copyBtn.style.color = "#fff";
+              copyBtn.style.borderColor = "var(--teal-600,#0D9488)";
+            } else {
+              copyBtn.textContent = "Selectie klaar — Cmd+C";
+            }
+          } catch (e) {
+            copyBtn.textContent = "Selectie klaar — Cmd+C";
+          }
+        };
+
+        var closeBtn = document.createElement("button");
+        closeBtn.textContent = "Sluiten";
+        closeBtn.style.cssText =
+          "padding:8px 14px;border-radius:6px;border:none;" +
+          "background:var(--ink,#1F2937);color:#fff;font-weight:600;font-size:13px;cursor:pointer;";
+        closeBtn.onclick = function () { backdrop.remove(); };
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(closeBtn);
+        card.appendChild(title);
+        card.appendChild(info);
+        card.appendChild(ta);
+        card.appendChild(actions);
+        backdrop.appendChild(card);
+        backdrop.addEventListener("click", function (e) {
+          if (e.target === backdrop) backdrop.remove();
+        });
+        document.body.appendChild(backdrop);
+
+        // Pre-select the textarea so Cmd+C works immediately.
+        setTimeout(function () { ta.focus(); ta.select(); }, 50);
+      }
+
       btn.addEventListener("click", async function () {
         var origText = btn.textContent;
+        var payload, summary, mapped, skipped;
         try {
           var blocks = (window.TWEAK_DEFAULTS && window.TWEAK_DEFAULTS.blocks) || [];
-          var skipped = 0;
-          var mapped = blocks.map(remapBlock).filter(function (b) {
+          skipped = 0;
+          mapped = blocks.map(remapBlock).filter(function (b) {
             if (b === null) { skipped++; return false; }
             return true;
           });
-          var payload = JSON.stringify({ blocks: mapped }, null, 2);
-          await navigator.clipboard.writeText(payload);
-          btn.classList.add("cms-export--ok");
-          btn.textContent = "✓ " + mapped.length + " blokken gekopieerd" + (skipped ? " (" + skipped + " overgeslagen)" : "");
+          payload = JSON.stringify({ blocks: mapped }, null, 2);
+          summary = mapped.length + " blokken klaar" + (skipped ? " (" + skipped + " overgeslagen)" : "");
         } catch (e) {
           btn.classList.add("cms-export--err");
           btn.textContent = "✗ " + (e.message || "Fout");
+          setTimeout(function () { btn.classList.remove("cms-export--err"); btn.textContent = origText; }, 3000);
+          return;
         }
-        setTimeout(function () {
-          btn.classList.remove("cms-export--ok", "cms-export--err");
-          btn.textContent = origText;
-        }, 2500);
+
+        // Try modern Clipboard API first; fall back to dialog if blocked
+        // (claude.ai artifact iframes block clipboard via Permissions-Policy).
+        var copiedDirectly = false;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(payload);
+            copiedDirectly = true;
+          } catch (e) {
+            // Permission denied or policy blocked — fall through to dialog.
+          }
+        }
+
+        if (copiedDirectly) {
+          btn.classList.add("cms-export--ok");
+          btn.textContent = "✓ " + summary + " — gekopieerd";
+          setTimeout(function () { btn.classList.remove("cms-export--ok"); btn.textContent = origText; }, 2500);
+        } else {
+          showExportDialog(payload, summary);
+        }
       });
     })();
   </script>
 
   <!-- Base64 asset data URIs — load BEFORE TWEAK_DEFAULTS so WITTY_ASSETS is defined. -->
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/assets.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/assets.js?v={{CACHE_BUST}}"></script>
 
   <script>
     // tekst + vraag-tekst resolve mediaSrc via window.MEDIA_SRC[b.mediaType], not b.mediaSrc.
@@ -633,26 +757,26 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
   <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
 
-  <!-- Hosted Witty runtime -->
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/TekstBouwblok.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/BlockShared.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Quote.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/ExternalLink.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/MediaCarousel.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Chat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Hotspot.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Stepper.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagShell.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagPrimitives.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagTekst.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagAfbeeldingen.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagPoll.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagStelling.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagVolgorde.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagConnect.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/app-tweaks.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/app-main.js"></script>
+  <!-- Hosted Witty runtime — alle witty-design-system URLs delen één ?v={{CACHE_BUST}} per artifact-generatie. -->
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/TekstBouwblok.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/BlockShared.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Quote.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/ExternalLink.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/MediaCarousel.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Chat.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Hotspot.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/Stepper.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagShell.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagPrimitives.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagTekst.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagAfbeeldingen.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagPoll.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagStelling.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagVolgorde.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/components/VraagConnect.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/app.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/app-tweaks.js?v={{CACHE_BUST}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/witty-design-system@1/app-main.js?v={{CACHE_BUST}}"></script>
 </body>
 </html>
 ```
@@ -671,7 +795,10 @@ Na het artifact: korte chat-response met:
 
 ## Gotchas & veelgemaakte fouten
 
+- **`<div id="root">` MOET in de body staan** — letterlijk `<div id="root" class="page"></div>` direct in `<body>`. `app-main.js` doet `createRoot(document.getElementById('root'))` en faalt met `Target container is not a DOM element` als die div ontbreekt. Niet hernoemen, niet weglaten, niet inwikkelen.
+- **Skeleton volgorde is verplicht** — body bevat in deze exacte volgorde: `#root` div, `#tweaks-panel` div, `#tweaks-toggle` button, `#cms-export` button, scripts. `assets.js` vóór `TWEAK_DEFAULTS`-script vóór React-scripts vóór `app-*.js`. Volgorde aanpassen breekt de mount.
 - **Relatieve paden breken** — alle `src`/`href` in de artifact moeten absolute `https://cdn.jsdelivr.net/npm/witty-design-system@1/...` URLs zijn.
+- **`{{CACHE_BUST}}` placeholder MOET vervangen** — vervang elke `{{CACHE_BUST}}` in het skeleton door dezelfde `Date.now()`-waarde (een 13-cijferig millisec-timestamp, bv. `1714240800000`). Eén waarde voor alle URLs in dit artifact. Niet vervangen = jsdelivr-cache levert oude `.js` versies en nieuwe features (chat-namen, fixes) zijn onzichtbaar.
 - **`VraagConnect.paren` ≠ `opties`** — andere prop-naam, index bepaalt match.
 - **Geen `type="module"` of `type="text/babel"`** — scripts zijn pre-compiled `.js` (esbuild output). Plain `<script src="…">` is correct. Niet veranderen.
 - **Blok zonder `id` of `kind`** — wordt genegeerd of crasht. Altijd beide meegeven.
