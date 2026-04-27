@@ -355,11 +355,11 @@ Minimaal 2 items. Placeholder asset mag herhaald met verschillende alt.
 
 ## Lengteguardrails
 
-| Lengte | Blokken | Doorloop |
-|---|---|---|
-| kort | 3–4 | 5–8 min |
-| standaard | 5–7 | 10–15 min |
-| lang | 8–10 | 20–30 min |
+| Lengte | Blokken |
+|---|---|
+| kort | 5–7 |
+| standaard | 8–12 |
+| lang | 14–25 |
 
 ## NL taal & copy-regels
 
