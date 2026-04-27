@@ -127,6 +127,7 @@ function renderBlock(b) {
         }
       );
     case "poll":
+    case "vraag-poll":
       return /* @__PURE__ */ React.createElement(
         VraagPoll,
         {
@@ -141,6 +142,7 @@ function renderBlock(b) {
         }
       );
     case "stelling":
+    case "vraag-stelling":
       return /* @__PURE__ */ React.createElement(
         VraagStelling,
         {
@@ -154,6 +156,7 @@ function renderBlock(b) {
         }
       );
     case "volgorde":
+    case "vraag-volgorde":
       return /* @__PURE__ */ React.createElement(
         VraagVolgorde,
         {
@@ -167,6 +170,7 @@ function renderBlock(b) {
         }
       );
     case "connect":
+    case "vraag-connect":
       return /* @__PURE__ */ React.createElement(
         VraagConnect,
         {
@@ -402,6 +406,7 @@ function templateFor(kind) {
         ]
       };
     case "poll":
+    case "vraag-poll":
       return {
         ...base,
         achtergrond: "neutral",
@@ -419,17 +424,19 @@ function templateFor(kind) {
         ]
       };
     case "stelling":
+    case "vraag-stelling":
       return {
         ...base,
         achtergrond: "standaard",
         eyebrow: "Stelling",
         intro: "Beoordeel de volgende uitspraak.",
-        titel: "Vestibulum placerat ipsum vel malesuada vehicula.",
+        titel: "Vul je stelling in.",
         instructie: "Is dit juist of onjuist?",
         juistIsJuist: true,
         toonFeedback: false
       };
     case "volgorde":
+    case "vraag-volgorde":
       return {
         ...base,
         achtergrond: "standaard",
@@ -446,6 +453,7 @@ function templateFor(kind) {
         ]
       };
     case "connect":
+    case "vraag-connect":
       return {
         ...base,
         achtergrond: "standaard",

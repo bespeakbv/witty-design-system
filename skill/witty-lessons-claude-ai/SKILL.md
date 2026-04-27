@@ -97,22 +97,17 @@ Alle runtime-files staan op `https://cdn.jsdelivr.net/npm/witty-design-system@{{
 
 Refereer altijd met absolute URLs. Never use relative paths in the artifact — artifacts have no base URL context.
 
-### Versie-resolve (verplicht)
+### Versie-pin (verplicht)
 
-jsDelivr's range-tags (`@1`, `@latest`) hebben een edge-cache die niet altijd direct ververst na npm publish — dan serveert de CDN nog dagen oude `.js` files. Gepin'de versies (`@1.0.7`) raken een aparte tarball-cache die wél direct goed staat. Een cachebuster query-string fixt dit niet — het probleem zit upstream van de browser-cache.
+jsDelivr's range-tags (`@1`, `@latest`) hebben een edge-cache die niet altijd direct ververst na npm publish — dan serveert de CDN nog dagen oude `.js` files. Gepin'de versies (`@1.0.9`) raken een aparte tarball-cache die wél direct goed staat.
 
-**Regel**: pin de versie. Vóór de artifact-generatie: doe één WebFetch om de huidige laatste versie op te halen, en vervang `{{WDS_VERSION}}` overal in het skeleton door die waarde.
+**Regel**: vervang `{{WDS_VERSION}}` overal in het skeleton door **`1.0.9`** (de huidige laatste versie). Eén identieke waarde voor alle URLs.
 
 ```
-WebFetch("https://cdn.jsdelivr.net/npm/witty-design-system/package.json")
-→ {"name":"witty-design-system","version":"1.0.8", ...}
+{{WDS_VERSION}} → 1.0.9
 ```
 
-Gebruik het `version`-veld (bv. `1.0.8`) als `{{WDS_VERSION}}`. Eén identieke waarde voor alle URLs in het artifact.
-
-Waarom **dit** endpoint? claude.ai's WebFetch deelt een trusted-host-whitelist met artifact's `connect-src` CSP. `cdn.jsdelivr.net` is whitelisted (artifacts laden er sowieso scripts vandaan). `data.jsdelivr.com` en `registry.npmjs.org` zijn **niet** whitelisted — die geven "Failed to fetch". jsDelivr serveert `package.json` zonder versie-pin door automatisch te resolveren naar latest, dus dit werkt als een lookup-endpoint.
-
-Lukt de lookup alsnog niet? Gebruik `1.0.8` als fallback en meld dat tegen de gebruiker.
+**Bij een nieuwe witty-design-system publish**: bump de waarde hier in deze regel. Eén find/replace per release. Geen WebFetch — dat is geprobeerd (registry.npmjs.org, data.jsdelivr.com, cdn.jsdelivr.net/npm/.../package.json) en alle drie geven "Failed to fetch" vanuit claude.ai's WebFetch tool. Hardcode is dus de praktische realiteit.
 
 ## Images: gebruik `WITTY_ASSETS[...]`, nooit directe URLs
 
@@ -582,7 +577,8 @@ Na het artifact: korte chat-response met:
 - **`<div id="root">` MOET in de body staan** — letterlijk `<div id="root" class="page"></div>` direct in `<body>`. `app-main.js` doet `createRoot(document.getElementById('root'))` en faalt met `Target container is not a DOM element` als die div ontbreekt. Niet hernoemen, niet weglaten, niet inwikkelen.
 - **Skeleton volgorde is verplicht** — body bevat in deze exacte volgorde: `#root` div, `#tweaks-panel` div, `#tweaks-toggle` button, `#cms-export` button, scripts. `assets.js` vóór `TWEAK_DEFAULTS`-script vóór React-scripts vóór `app-*.js`. Volgorde aanpassen breekt de mount.
 - **Relatieve paden breken** — alle `src`/`href` in de artifact moeten absolute `https://cdn.jsdelivr.net/npm/witty-design-system@{{WDS_VERSION}}/...` URLs zijn.
-- **`{{WDS_VERSION}}` placeholder MOET vervangen** — vóór generatie WebFetch op `https://cdn.jsdelivr.net/npm/witty-design-system/package.json`, pak `version` (bv. `1.0.8`), vervang elke `{{WDS_VERSION}}` in skeleton door die waarde. Eén waarde voor alle URLs. Niet vervangen of fout pinnen = jsDelivr range-tag-cache levert oude `.js` versies en nieuwe features zijn onzichtbaar. Lookup faalt? Fallback naar `1.0.8` en meld het. Gebruik **niet** `data.jsdelivr.com` of `registry.npmjs.org` — die zitten niet in claude.ai's WebFetch-whitelist.
+- **`{{WDS_VERSION}}` placeholder MOET vervangen door `1.0.9`** — geen WebFetch-lookup (alle pogingen geblokkeerd door claude.ai's WebFetch-whitelist). Vervang elke `{{WDS_VERSION}}` in skeleton door `1.0.9`. Eén identieke waarde voor alle URLs. Niet vervangen = scripts laden niet (404 op `@{{WDS_VERSION}}/`). Bij elke nieuwe witty-design-system publish: bump deze waarde en die in *Versie-pin (verplicht)* sectie hierboven.
+- **Kind-namen exact** — gebruik exact deze 13 kinds, geen prefix improviseren: `tekst`, `quote`, `external-link`, `media-carousel`, `chat`, `hotspot`, `stepper`, `vraag-tekst`, `vraag-afb`, `poll`, `stelling`, `volgorde`, `connect`. Vanaf 1.0.9 zijn `vraag-poll`/`vraag-stelling`/`vraag-volgorde`/`vraag-connect` geaccepteerde aliases (dispatch-side), maar de canonieke namen zijn de eerste zonder prefix.
 - **`VraagConnect.paren` ≠ `opties`** — andere prop-naam, index bepaalt match.
 - **Geen `type="module"` of `type="text/babel"`** — scripts zijn pre-compiled `.js` (esbuild output). Plain `<script src="…">` is correct. Niet veranderen.
 - **Blok zonder `id` of `kind`** — wordt genegeerd of crasht. Altijd beide meegeven.
