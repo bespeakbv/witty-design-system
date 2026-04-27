@@ -1,0 +1,679 @@
+{
+  "operationName": "UpdateBuildingBlocksForDidacticTool",
+  "variables": {
+    "input": {
+      "buildingBlocks": [
+        {
+          "__typename": "StandBuildingBlockDto",
+          "id": "3933a282-e941-4133-989e-fd4f3aefe48e",
+          "order": 0,
+          "type": "STAND",
+          "agreeText": "Juist",
+          "assetId": null,
+          "correctOption": "DISAGREE",
+          "disagreeText": "Onjuist",
+          "stand": "Ondernemen draait vooral om geld verdienen.",
+          "background": "NEUTRAL_LIGHT",
+          "correctFeedbackText": "{\"ops\":[{\"insert\":\"Klopt. Ondernemen gaat ook over vrijheid, eigen keuzes en groei. Geld is belangrijk, maar niet de enige reden om te starten.\\n\"}]}",
+          "incorrectFeedbackText": "{\"ops\":[{\"insert\":\"Niet helemaal. Geld speelt zeker een rol, maar veel ondernemers kiezen ook voor vrijheid, creativiteit en eigen invulling van hun werk.\\n\"}]}",
+          "objectFit": "BOXED",
+          "layout": "TEXT_CENTERED",
+          "instruction": "Kies Juist of Onjuist.",
+          "text": null,
+          "title": null
+        },
+        {
+          "__typename": "ContentBuildingBlockDto",
+          "id": "60799d51-4d44-4118-9a72-6f82ad53f209",
+          "order": 1,
+          "type": "CONTENT",
+          "background": "WHITE",
+          "assetId": null,
+          "assetColumnTwoId": null,
+          "contentColumnOne": "{\"ops\":[{\"insert\":\"In loondienst werk je voor een werkgever. Je krijgt een vast salaris en hebt duidelijke taken. De salon laten draaien is niet jouw verantwoordelijkheid. Dit geeft zekerheid, maar minder ruimte voor eigen keuzes.\\n\"}]}",
+          "contentColumnTwo": "{\"ops\":[{\"insert\":\"Als ondernemer ben je je eigen baas. Je bepaalt zelf welke behandelingen je aanbiedt en hoe je salon eruitziet. Je regelt alles: van klanten werven tot administratie. Je inkomen hangt af van het succes van je salon.\\n\"}]}",
+          "objectFit": "BOXED",
+          "spacing": {
+            "__typename": "SpacingDto",
+            "bottom": "DEFAULT",
+            "top": "DEFAULT"
+          },
+          "list": null,
+          "layout": "TWO_COLUMNS"
+        },
+        {
+          "__typename": "MpcBuildingBlockDto",
+          "id": "3068f7ae-331b-4a73-a4ba-3ab0de8810e3",
+          "order": 2,
+          "type": "MPC",
+          "answers": [
+            {
+              "__typename": "AnswerDto",
+              "id": "5b3279bf-faf3-4462-8d96-c7031972d5f0",
+              "correct": true,
+              "text": "Je hebt een vast salaris en duidelijke taken.",
+              "assetId": null,
+              "content": null,
+              "sortOrder": 0
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "3cb5569e-2894-4e77-abe5-b0d869121532",
+              "correct": false,
+              "text": "Je bepaalt zelf welke behandelingen je aanbiedt.",
+              "assetId": null,
+              "content": null,
+              "sortOrder": 1
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "e193802a-c0e9-4891-8c17-f7c384e3c402",
+              "correct": false,
+              "text": "Je regelt zelf je verzekering en pensioen.",
+              "assetId": null,
+              "content": null,
+              "sortOrder": 2
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "c4f1ec04-db4b-4a8f-8e08-6821a3600c9b",
+              "correct": false,
+              "text": "Je hangt qua inkomen af van het aantal klanten.",
+              "assetId": null,
+              "content": null,
+              "sortOrder": 3
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "f6ac7c30-b8b5-4060-872b-ba7d3fb0db9b",
+              "correct": false,
+              "text": "Antwoord",
+              "assetId": null,
+              "content": null,
+              "sortOrder": 4
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "d4f227c6-3dda-452e-88ec-f1508c576043",
+              "correct": false,
+              "text": "Antwoord",
+              "assetId": null,
+              "content": null,
+              "sortOrder": 5
+            }
+          ],
+          "assetId": null,
+          "question": "Welke uitspraak past het beste bij werken in loondienst?",
+          "background": "WHITE",
+          "introduction": null,
+          "helpText": null,
+          "correctFeedbackText": null,
+          "incorrectFeedbackText": null,
+          "sorting": "RANDOMIZED",
+          "objectFit": "BOXED",
+          "subType": "mpc",
+          "layout": "TEXT_CENTERED",
+          "instruction": "Kies een antwoord.",
+          "title": null
+        },
+        {
+          "__typename": "HotspotBuildingBlockDto",
+          "id": "6e023313-bf60-4d21-80c5-433bdfc193bd",
+          "order": 3,
+          "type": "HOTSPOT",
+          "content": "{\"ops\":[{\"insert\":\"Twee kanten van het ondernemerschap\\nOndernemen biedt vrijheid en ruimte om te groeien, maar brengt ook onzekerheid mee. Hieronder zie je vier punten waarop voor- en nadelen samenhangen.\\nVrijheid in keuzes â Je bepaalt zelf welke behandelingen je aanbiedt, hoe je salon eruitziet en wanneer je werkt.\\nGeen vast inkomen â Je salaris hangt afDoelgericht\\nWerken aan je doel van het succes van je salon. Reserveren en plannen zijn belangrijk.\\nEigen tijd indelen â Je kiest zelf wanneer je werkt, maar verwacht ook werk in de avonduren voor administratie.\\nVeel verantwoordelijkheid â Naast je vak ben je ook manager, marketeer en boekhouder.\\n\"}]}",
+          "spots": [
+            {
+              "__typename": "SpotDto",
+              "content": "{\"ops\":[{\"insert\":\"jfjk\\n\"}]}",
+              "id": "03e54f52-eb0a-407b-b743-c70d47566b08",
+              "title": "hmhgj",
+              "x": 0.5,
+              "y": 0.5
+            }
+          ],
+          "background": "NEUTRAL_LIGHT",
+          "layout": "IMAGE_LEFT",
+          "assetId": "caa75f98-1b4d-4bfc-8b5e-3f5a0478d696"
+        },
+        {
+          "__typename": "QuestionConnectBuildingBlockDto",
+          "id": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+          "order": 4,
+          "type": "QUESTION_CONNECT",
+          "instruction": "Sleep of gebruik de pijlen om elk nadeel aan een passende aanpak te koppelen.",
+          "correctFeedbackText": "",
+          "incorrectFeedbackText": "",
+          "introduction": "",
+          "layout": "CENTERED",
+          "question": "Hoe ga je om met de nadelen?",
+          "background": "WHITE",
+          "title": "",
+          "items": [
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "e8dafd25-55b6-41de-97be-b1336fb1b45e",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "5a5a5b40-0d71-4bfe-a3fd-9661521557f1",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Reserveer maandelijks geld voor stille periodes en belasting"
+              },
+              "assetId": "b8b528b5-dd5e-4e18-8724-0f32f7b6dd2a",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            },
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "8dff0471-c5fe-4544-abd2-7ad3bdbc6744",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "66b5cf40-c2ce-4ffe-94c8-c90c81e5aba3",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Veel administratie"
+              },
+              "assetId": "480abf4e-4427-4f6d-8afa-cb5fb26ec544",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            },
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "25c77c6b-dcee-4a67-b06d-b249ca960dc9",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "1039d67b-5b1c-4b7f-a609-611331d16732",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Plan elke week vaste tijd of schakel een boekhouder in"
+              },
+              "assetId": "4e80492f-20a8-4ed9-a660-917bda1619c1",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            },
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "1f5d9670-3c44-4fdb-ba0e-96490f069960",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "22f73154-633e-4f1d-a402-b466e1e693ca",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Eenzaam werken"
+              },
+              "assetId": "319e2e3e-8cbd-4761-921c-fd3def6d0ebd",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            },
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "ee3f2c7d-51fa-4660-9479-12218e9fbf54",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "b993286e-99c1-4bd0-abf2-fcb6a5c9750f",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Bouw een netwerk van andere ondernemers op"
+              },
+              "assetId": "96e51904-c725-4417-bb6a-8edf5d0a7686",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            },
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "d36dd240-af1d-4e76-b289-7c28b2603514",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "9d2d604b-5e94-4694-afee-f71c7f5aa80c",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Alleen ondernemen, dan houd ik volledig de regie"
+              },
+              "assetId": "c83d0426-daf7-4cc1-98ff-09d21612e22a",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            },
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "954956a8-6db8-4155-adfc-ce40d3989a94",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "35543ae2-25ec-4b51-be7e-17fa292f5991",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Samen ondernemen, dan deel ik risico en ideeÃ«n"
+              },
+              "assetId": "914423bd-d371-4a02-88de-b89dc919189b",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            },
+            {
+              "__typename": "QuestionConnectItemDto",
+              "id": "a03b7aa2-aa41-4f6e-b99b-ee881e6d2579",
+              "correctAnswer": {
+                "__typename": "QuestionConnectItemAnswerDto",
+                "id": "9d370539-6c06-4364-a2e5-82307376f0f1",
+                "assetId": null,
+                "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+                "content": "Geen vast inkomen"
+              },
+              "assetId": "1e8e0d63-bc4b-4ea2-b412-de4d959ecc7f",
+              "buildingBlockId": "976a9795-c509-4c37-afb8-ebc105db8e7b",
+              "content": ""
+            }
+          ],
+          "questionConnectType": "IMAGE_TEXT"
+        },
+        {
+          "__typename": "ContentBuildingBlockDto",
+          "id": "5c5d3fc9-cda5-48b9-a2c9-d789253a2d62",
+          "order": 5,
+          "type": "CONTENT",
+          "background": "NEUTRAL_LIGHT",
+          "assetId": "3343ed9a-1908-4eb0-9585-f50b9c273b96",
+          "assetColumnTwoId": null,
+          "contentColumnOne": "{\"ops\":[{\"insert\":\"Alleen of samen ondernemen?\\nTwee mogelijkheden\\nJe hoeft niet alleen te starten. Samen met iemand een oCreatief\\nOriginele oplossingennderneming beginnen heeft voordelen: je deelt de kosten, het risico en de werkdruk. Je kunt ook leren van elkaars sterke punten. Tegelijk moet je het eens worden over keuzes en de winst delen.\\n\"}]}",
+          "contentColumnTwo": null,
+          "objectFit": "BOXED",
+          "spacing": {
+            "__typename": "SpacingDto",
+            "bottom": "DEFAULT",
+            "top": "DEFAULT"
+          },
+          "list": null,
+          "layout": "IMAGE_RIGHT"
+        },
+        {
+          "__typename": "PollBuildingBlockDto",
+          "id": "a1ce97bc-515a-4885-89e1-0cc09df2a7fc",
+          "order": 6,
+          "type": "POLL",
+          "voteOption": "MULTIPLE",
+          "answers": [
+            {
+              "__typename": "PollAnswerDto",
+              "id": "ae0458bb-b573-4c8e-b368-9831b4ed7f02",
+              "text": "Eerst alleen, later eventueel samen",
+              "sortOrder": 0
+            },
+            {
+              "__typename": "PollAnswerDto",
+              "id": "5a583186-2ca9-49c3-bc65-a791ba2d37b1",
+              "text": "Dat weet ik nog niet",
+              "sortOrder": 1
+            }
+          ],
+          "question": "Wat past het beste bij jou?",
+          "instruction": "Kies Ã©Ã©n antwoord. Er is geen goed of fout.",
+          "introduction": "{\"ops\":[{\"insert\":\"introductie die ontbreekt\\n\"}]}",
+          "background": "WHITE",
+          "layout": "DEFAULT"
+        },
+        {
+          "__typename": "CarouselBuildingBlockDto",
+          "id": "7ccee579-134f-4de9-abca-4f3aa4f3c50d",
+          "order": 7,
+          "type": "CAROUSEL",
+          "background": "BRAND_DARK",
+          "blocks": [
+            {
+              "__typename": "ContentBuildingBlockDto",
+              "id": "db6840a4-b1bf-4ae1-8d18-a3174748fdf0",
+              "order": 0,
+              "type": "CONTENT",
+              "background": "BRAND_DARK",
+              "assetId": null,
+              "assetColumnTwoId": null,
+              "contentColumnOne": "{\"ops\":[{\"insert\":\"Doelgericht\\nWerken aan je doel\\n\"}]}",
+              "contentColumnTwo": "{\"ops\":[{\"insert\":\"Je hebt een duidelijk doel voor je salon en werkt er stap voor stap aan. Je legt de lat steeds iets hoger en blijft jezelf uitdagen. Dit helpt je om door te groeien, ook als het tegenzit.\\n\"}]}",
+              "objectFit": "BOXED",
+              "textLayout": "TWO_COLUMNS",
+              "textBackground": "BRAND_DARK",
+              "spacing": {
+                "__typename": "SpacingDto",
+                "bottom": "DEFAULT",
+                "top": "DEFAULT"
+              },
+              "list": null,
+              "layout": "TWO_COLUMNS"
+            },
+            {
+              "__typename": "ContentBuildingBlockDto",
+              "id": "c87a8b6d-b040-4d79-a469-b91280e0103c",
+              "order": 3,
+              "type": "CONTENT",
+              "background": "WHITE",
+              "assetId": null,
+              "assetColumnTwoId": null,
+              "contentColumnOne": "{\"ops\":[{\"insert\":\"Doorzettingsvermogen\\nVolhouden bij tegenslag\\n\"}]}",
+              "contentColumnTwo": "{\"ops\":[{\"insert\":\"Niet alles gaat in Ã©Ã©n keer goed. Je houdt vol als klanten wegblijven of een product tegenvalt. Met doorzettingsvermogen leer je van fouten en bouw je rustig verder aan je salon. \\n\"}]}",
+              "objectFit": "BOXED",
+              "textLayout": "TWO_COLUMNS",
+              "textBackground": "WHITE",
+              "spacing": {
+                "__typename": "SpacingDto",
+                "bottom": "NONE",
+                "top": "NONE"
+              },
+              "list": null,
+              "layout": "TWO_COLUMNS"
+            },
+            {
+              "__typename": "ContentBuildingBlockDto",
+              "id": "d95816fe-9d7a-4b23-8222-457759095d5e",
+              "order": 4,
+              "type": "CONTENT",
+              "background": "WHITE",
+              "assetId": null,
+              "assetColumnTwoId": null,
+              "contentColumnOne": "{\"ops\":[{\"insert\":\"Inlevingsvermogen\\nAansluiten bij de klant \\n\"}]}",
+              "contentColumnTwo": "{\"ops\":[{\"insert\":\"Je luistert echt naar wat je klanten willen en begrijpt hun gevoelens. Hierdoor adviseer je beter en voelen klanten zich gezien. Dit is vaak het verschil tussen een eenmalige en een vaste klant. \\n\"}]}",
+              "objectFit": "BOXED",
+              "textLayout": "TWO_COLUMNS",
+              "textBackground": "WHITE",
+              "spacing": {
+                "__typename": "SpacingDto",
+                "bottom": "NONE",
+                "top": "NONE"
+              },
+              "list": null,
+              "layout": "TWO_COLUMNS"
+            },
+            {
+              "__typename": "ContentBuildingBlockDto",
+              "id": "46600d60-b35c-49e5-b4b9-f3a0f8746708",
+              "order": 5,
+              "type": "CONTENT",
+              "background": "WHITE",
+              "assetId": null,
+              "assetColumnTwoId": null,
+              "contentColumnOne": "{\"ops\":[{\"insert\":\"Ontwikkelingsgericht\\nBlijven leren \\n\"}]}",
+              "contentColumnTwo": "{\"ops\":[{\"insert\":\"Je volgt trends in je vakgebied en zoekt naar manieren om jezelf te verbeteren. Je leest over nieuwe technieken, volgt scholing en leert van andere ondernemers. Zo blijft je aanbod actueel en relevant. \\n\"}]}",
+              "objectFit": "BOXED",
+              "textLayout": "TWO_COLUMNS",
+              "textBackground": "WHITE",
+              "spacing": {
+                "__typename": "SpacingDto",
+                "bottom": "NONE",
+                "top": "NONE"
+              },
+              "list": null,
+              "layout": "TWO_COLUMNS"
+            },
+            {
+              "__typename": "ContentBuildingBlockDto",
+              "id": "08715394-9b74-40e8-adb6-a21484a4f72d",
+              "order": 1,
+              "type": "CONTENT",
+              "background": "WHITE",
+              "assetId": null,
+              "assetColumnTwoId": null,
+              "contentColumnOne": "{\"ops\":[{\"insert\":\"Betrouwbaar\\nDoen wat je belooft\\n\"}]}",
+              "contentColumnTwo": "{\"ops\":[{\"insert\":\"Klanten en leveranciers moeten op je kunnen rekenen. Je komt afspraken na, bent eerlijk en helder over wat je wel en niet kunt. Dit zorgt ervoor dat klanten terugkomen en je reputatie groeit.\\n\"}]}",
+              "objectFit": "BOXED",
+              "textLayout": "TWO_COLUMNS",
+              "textBackground": "WHITE",
+              "spacing": {
+                "__typename": "SpacingDto",
+                "bottom": "NONE",
+                "top": "NONE"
+              },
+              "list": null,
+              "layout": "TWO_COLUMNS"
+            },
+            {
+              "__typename": "ContentBuildingBlockDto",
+              "id": "f595f123-46f5-43a2-875b-c1d7dc276b0a",
+              "order": 2,
+              "type": "CONTENT",
+              "background": "WHITE",
+              "assetId": null,
+              "assetColumnTwoId": null,
+              "contentColumnOne": "{\"ops\":[{\"insert\":\"Creatief\\nOriginele oplossingen\\n\"}]}",
+              "contentColumnTwo": "{\"ops\":[{\"insert\":\"Je bedenkt nieuwe ideeÃ«n voor behandelingen, producten en de uitstraling van je salon. Creativiteit helpt je om op te vallen tussen andere salons. Je verrast je klanten met iets dat ze nergens anders krijgen.\\n\"}]}",
+              "objectFit": "BOXED",
+              "textLayout": "TWO_COLUMNS",
+              "textBackground": "WHITE",
+              "spacing": {
+                "__typename": "SpacingDto",
+                "bottom": "NONE",
+                "top": "NONE"
+              },
+              "list": null,
+              "layout": "TWO_COLUMNS"
+            }
+          ],
+          "spacing": {
+            "__typename": "SpacingDto",
+            "bottom": "DEFAULT",
+            "top": "DEFAULT"
+          },
+          "layout": "DEFAULT"
+        },
+        {
+          "__typename": "MpcBuildingBlockDto",
+          "id": "0989ca41-30f0-4596-a6c4-f73a5c9493ad",
+          "order": 8,
+          "type": "MPC",
+          "answers": [
+            {
+              "__typename": "AnswerDto",
+              "id": "81924d94-b1cd-4b1a-941b-9a6989299592",
+              "correct": true,
+              "text": "De vrijheid om eigen keuzes te maken",
+              "assetId": "13a39471-ebf4-49c0-a323-0ab179cfd6a4",
+              "content": null,
+              "sortOrder": 0
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "57f1101b-27ed-442c-89ad-969a5290eee4",
+              "correct": false,
+              "text": "Ruimte om je vakgebied creatief vorm te geven",
+              "assetId": "06699a69-14b2-4db7-9d73-1ad489f2ef83",
+              "content": null,
+              "sortOrder": 1
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "8ae54391-da13-4a4c-81f9-60a6abe5df83",
+              "correct": true,
+              "text": "Een vast salaris dat elke maand binnenkomt",
+              "assetId": "437f2847-7fd3-4e44-a208-d5333978dd1f",
+              "content": null,
+              "sortOrder": 2
+            },
+            {
+              "__typename": "AnswerDto",
+              "id": "bf730cd0-0b60-4427-b99f-1557d48c10ea",
+              "correct": true,
+              "text": "De mogelijkheid om je salon te laten groeien op jouw manier",
+              "assetId": "ed5fc21c-703d-4d41-8ea4-a05077e544bd",
+              "content": null,
+              "sortOrder": 3
+            }
+          ],
+          "assetId": null,
+          "question": "Welke kwaliteit past bij deze situatie?",
+          "background": "WHITE",
+          "introduction": null,
+          "helpText": null,
+          "correctFeedbackText": null,
+          "incorrectFeedbackText": null,
+          "sorting": "RANDOMIZED",
+          "objectFit": "BOXED",
+          "subType": "mpc-with-images",
+          "layout": "TEXT_CENTERED",
+          "instruction": "Een nieuwe behandeling wordt populair. Jij past je aanbod snel aan, maar blijft bij je eigen visie. Welke kwaliteit gebruik je vooral?",
+          "title": null
+        },
+        {
+          "__typename": "QuoteBuildingBlockDto",
+          "id": "c9928c1c-b93b-4372-8af3-46dc5c3cc5a7",
+          "order": 9,
+          "type": "QUOTE",
+          "background": "WHITE",
+          "quote": "Ik dacht dat ondernemen vooral hard werken en doorgaan was. Maar ik merk dat ik soms ook even stil moet staan bij hoe alles gaat. Zo kan ik beter inschatten welke dingen echt mijn aandacht nodig hebben.",
+          "name": "Anna de Vries, schoonheidsspecialist",
+          "assetId": "53dd28f9-5415-4e6a-9d40-30b9fa5658ac",
+          "layout": "IMAGE_LEFT"
+        },
+        {
+          "__typename": "SortQuestionBuildingBlockDto",
+          "id": "34df4973-c2b4-4aac-b27b-244379394dc5",
+          "order": 10,
+          "type": "SORT_QUESTION",
+          "background": "WHITE",
+          "introduction": null,
+          "question": "Welke redenen passen bij een keuze voor ondernemerschap?",
+          "correctFeedbackText": null,
+          "incorrectFeedbackText": null,
+          "assetId": null,
+          "objectFit": "FULL",
+          "layout": "TWO_COLUMNS",
+          "instruction": "Meerdere antwoorden zijn mogelijk.",
+          "title": null,
+          "answers": [
+            {
+              "__typename": "SortQuestionAnswerDto",
+              "order": 0,
+              "text": "Reflecteer op je sterke en minder sterke punten",
+              "id": "7a3fc70d-e240-4c67-b669-3d3897e7ca27"
+            },
+            {
+              "__typename": "SortQuestionAnswerDto",
+              "order": 1,
+              "text": "Bepaal je doelgroep en specialisatie",
+              "id": "3c36e50b-976d-486c-90a2-ef48b113b83c"
+            },
+            {
+              "__typename": "SortQuestionAnswerDto",
+              "order": 2,
+              "text": "Praat met andere ondernemers en vraag feedback",
+              "id": "13b931a4-c10f-48e6-b68e-7deddba3cc89"
+            },
+            {
+              "__typename": "SortQuestionAnswerDto",
+              "order": 3,
+              "text": "Werk je ideeÃ«n uit in een ondernemingsplan",
+              "id": "c41f1769-193f-4c0d-8b15-525f8a004fe7"
+            },
+            {
+              "__typename": "SortQuestionAnswerDto",
+              "order": 4,
+              "text": "Regel praktische zaken bij de KvK en je bank",
+              "id": "0b45c8ed-0d3d-46fd-9f65-c220c8f32cb4"
+            },
+            {
+              "__typename": "SortQuestionAnswerDto",
+              "order": 5,
+              "text": "Antwoord",
+              "id": "0e86cd11-c519-4dee-b572-20b0107f4da7"
+            },
+            {
+              "__typename": "SortQuestionAnswerDto",
+              "order": 6,
+              "text": "Antwoord",
+              "id": "b2116cb5-cdc5-467b-9d82-f9114d9557e6"
+            }
+          ]
+        },
+        {
+          "__typename": "ConversationBuildingBlockDto",
+          "id": "798ca905-0817-41c1-b1b8-1d53c31c0d44",
+          "order": 11,
+          "type": "CONVERSATION",
+          "interval": 0,
+          "messages": [
+            {
+              "__typename": "MessageDto",
+              "id": "f1eaa72e-ab94-4286-a93a-5c6fbd0e9b59",
+              "message": "{\"ops\":[{\"insert\":\"Ik twijfel of ondernemen wel bij me past. Soms voel ik me zeker, en dan weer niet.\\n\"}]}",
+              "order": 0,
+              "personIndex": 0
+            },
+            {
+              "__typename": "MessageDto",
+              "id": "287771a4-8633-424b-a61b-a545c496df4a",
+              "message": "{\"ops\":[{\"insert\":\"Dat hoort erbij. Wat trekt je het meest aan in ondernemen?\\n\"}]}",
+              "order": 1,
+              "personIndex": 1
+            },
+            {
+              "__typename": "MessageDto",
+              "id": "9cccad41-2d7a-4a30-a833-52a975a4ac5a",
+              "message": "{\"ops\":[{\"insert\":\"De vrijheid. Ik wil zelf bepalen welke behandelingen ik aanbied en hoe ik werk.\\n\"}]}",
+              "order": 2,
+              "personIndex": 0
+            },
+            {
+              "__typename": "MessageDto",
+              "id": "ec20151f-52e3-46e7-8c9a-c4dc1fb9231f",
+              "message": "{\"ops\":[{\"insert\":\"En wat houdt je tegen?\\n\"}]}",
+              "order": 3,
+              "personIndex": 1
+            },
+            {
+              "__typename": "MessageDto",
+              "id": "4bc6b742-6636-4658-9c4f-c39880a8ca88",
+              "message": "{\"ops\":[{\"insert\":\"De financiÃ«le onzekerheid. En de administratie vind ik niet leuk.\\n\"}]}",
+              "order": 4,
+              "personIndex": 0
+            },
+            {
+              "__typename": "MessageDto",
+              "id": "f53c7ff8-88bb-4a65-bb47-50c41d672665",
+              "message": "{\"ops\":[{\"insert\":\"Welke kwaliteit kun je inzetten om die punten aan te pakken? En wie kan je daarbij helpen?\\n\"}]}",
+              "order": 5,
+              "personIndex": 1
+            }
+          ],
+          "persons": [
+            {
+              "__typename": "PersonDto",
+              "id": "20bd3aad-5478-42b3-b2c8-49ba41db07c0",
+              "name": "Annemarie de Vries",
+              "assetId": "9cebd9c9-503e-4de9-8cf0-ee0977ecfd02",
+              "order": 0,
+              "direction": "LEFT"
+            },
+            {
+              "__typename": "PersonDto",
+              "id": "2bb8f20f-07dd-47d2-944a-a1f2ad9d7d1b",
+              "name": "Michel Bakker",
+              "assetId": "f097d8e5-0b89-4653-a815-953d0068aed5",
+              "order": 1,
+              "direction": "RIGHT"
+            }
+          ],
+          "layout": "DEFAULT",
+          "background": "NEUTRAL_LIGHT"
+        },
+        {
+          "__typename": "ContentBuildingBlockDto",
+          "id": "7df7d8b3-4da2-44c1-a061-a70af9afc94d",
+          "order": 12,
+          "type": "CONTENT",
+          "background": "WHITE",
+          "assetId": null,
+          "assetColumnTwoId": null,
+          "contentColumnOne": "{\"ops\":[{\"insert\":\"Wat is jouw volgende stap?\\nOp weg naar je eigen plan\\nJe weet nu wat ondernemen inhoudt en wat het verschilt van werken in loondienst. Je hebt gezien welke kwaliteiten helpen, welke valkuilen er zijn en waarom mensen voor ondernemerschap kiezen. In de volgende hoofdstukken werk je stap voor stap aan je eigen ondernemingsplan. Begin alvast met nadenken over wat voor ondernemer jij wilt zijn.\\n\"}]}",
+          "contentColumnTwo": null,
+          "objectFit": "BOXED",
+          "spacing": {
+            "__typename": "SpacingDto",
+            "bottom": "DEFAULT",
+            "top": "DEFAULT"
+          },
+          "list": null,
+          "layout": "TEXT_CENTERED"
+        }
+      ],
+      "didacticToolId": "ae6834b1-b0a8-491a-8652-fc098471497d",
+      "versionId": "7192fba3-5e3b-4b9c-ae80-09acccd95ac9",
+      "audience": null
+    }
+  },
+  "query": "mutation UpdateBuildingBlocksForDidacticTool($input: UpdateBuildingBlocksForDidacticToolInput!) {\n  updateBuildingBlocksForDidacticTool(input: $input) {\n    buildingBlocks {\n      id\n      order\n      type\n      __typename\n    }\n    __typename\n  }\n}"
+}

@@ -17,6 +17,8 @@
 //   titel:         optionele bloktitel (boven gesprek)
 //   berichten:     [{ auteur, titel?, tekst, avatarSrc? }]
 //   avatars:       { links: url, rechts: url }  — overschrijft per-bericht avatarSrc als niet gezet
+//   personen:      [{ naam, positie }] — optioneel; naam verschijnt boven eerste bubble per run
+//                  (Slack-stijl). Lookup op positie ("links"/"rechts").
 
 const CHAT_DEFAULTS = {
   avatars: {
@@ -97,7 +99,7 @@ function ChatAvatar({ src, size = 56 }) {
   );
 }
 
-function ChatBubble({ bericht, isFirstInRun, isLastInRun, avatars, palette }) {
+function ChatBubble({ bericht, isFirstInRun, isLastInRun, avatars, naam, palette }) {
   const isLinks = bericht.auteur !== "rechts";
   // Kleur van de bubble
   const bubbleKleur = isLinks
@@ -126,6 +128,22 @@ function ChatBubble({ bericht, isFirstInRun, isLastInRun, avatars, palette }) {
       }}
     >
       {isLastInRun && <BubbleTail kleur={tailKleur} links={isLinks} />}
+      {isFirstInRun && naam && (
+        <div
+          style={{
+            fontFamily: "var(--font-body)",
+            fontWeight: 600,
+            fontSize: 12,
+            lineHeight: "16px",
+            letterSpacing: "0.02em",
+            color: "var(--ink-muted, #6B7280)",
+            marginBottom: 4,
+            textAlign: isLinks ? "left" : "right",
+          }}
+        >
+          {naam}
+        </div>
+      )}
       {bericht.titel && (
         <div
           style={{
@@ -189,6 +207,7 @@ function Chat({
     { auteur: "links",  titel: "Titel", tekst: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor." },
   ],
   avatars = CHAT_DEFAULTS.avatars,
+  personen = [],
 }) {
   // Bereken voor elk bericht of het first/last-in-run is van dezelfde auteur.
   const flags = berichten.map((m, i) => {
@@ -199,6 +218,13 @@ function Chat({
       isLastInRun: !next || next.auteur !== m.auteur,
     };
   });
+
+  // Lookup naam by positie ("links"/"rechts") — undefined als niet gevonden,
+  // dan rendert ChatBubble geen naam-regel.
+  const naamFor = (positie) => {
+    const match = personen.find((p) => p && p.positie === positie);
+    return match ? match.naam : undefined;
+  };
 
   return (
     <BlockFrame achtergrond={achtergrond} onderSpacing={onderSpacing} contentMaxWidth={800}>
@@ -226,6 +252,7 @@ function Chat({
               isFirstInRun={flags[i].isFirstInRun}
               isLastInRun={flags[i].isLastInRun}
               avatars={avatars}
+              naam={naamFor(b.auteur === "rechts" ? "rechts" : "links")}
               palette={p}
             />
           ))}

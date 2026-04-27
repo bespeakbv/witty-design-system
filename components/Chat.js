@@ -82,7 +82,7 @@ function ChatAvatar({ src, size = 56 }) {
     )
   );
 }
-function ChatBubble({ bericht, isFirstInRun, isLastInRun, avatars, palette }) {
+function ChatBubble({ bericht, isFirstInRun, isLastInRun, avatars, naam, palette }) {
   const isLinks = bericht.auteur !== "rechts";
   const bubbleKleur = isLinks ? palette.bg === "var(--bg-neutral)" ? "var(--white)" : "var(--neutral-50)" : "#DEF2F1";
   const textKleur = "var(--ink)";
@@ -104,6 +104,22 @@ function ChatBubble({ bericht, isFirstInRun, isLastInRun, avatars, palette }) {
       }
     },
     isLastInRun && /* @__PURE__ */ React.createElement(BubbleTail, { kleur: tailKleur, links: isLinks }),
+    isFirstInRun && naam && /* @__PURE__ */ React.createElement(
+      "div",
+      {
+        style: {
+          fontFamily: "var(--font-body)",
+          fontWeight: 600,
+          fontSize: 12,
+          lineHeight: "16px",
+          letterSpacing: "0.02em",
+          color: "var(--ink-muted, #6B7280)",
+          marginBottom: 4,
+          textAlign: isLinks ? "left" : "right"
+        }
+      },
+      naam
+    ),
     bericht.titel && /* @__PURE__ */ React.createElement(
       "div",
       {
@@ -158,7 +174,8 @@ function Chat({
     { auteur: "links", titel: "Titel", tekst: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor." },
     { auteur: "links", titel: "Titel", tekst: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor." }
   ],
-  avatars = CHAT_DEFAULTS.avatars
+  avatars = CHAT_DEFAULTS.avatars,
+  personen = []
 }) {
   const flags = berichten.map((m, i) => {
     const prev = berichten[i - 1];
@@ -168,6 +185,10 @@ function Chat({
       isLastInRun: !next || next.auteur !== m.auteur
     };
   });
+  const naamFor = (positie) => {
+    const match = personen.find((p) => p && p.positie === positie);
+    return match ? match.naam : void 0;
+  };
   return /* @__PURE__ */ React.createElement(BlockFrame, { achtergrond, onderSpacing, contentMaxWidth: 800 }, (p) => /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column" } }, titel && /* @__PURE__ */ React.createElement(
     "h3",
     {
@@ -190,6 +211,7 @@ function Chat({
       isFirstInRun: flags[i].isFirstInRun,
       isLastInRun: flags[i].isLastInRun,
       avatars,
+      naam: naamFor(b.auteur === "rechts" ? "rechts" : "links"),
       palette: p
     }
   ))));

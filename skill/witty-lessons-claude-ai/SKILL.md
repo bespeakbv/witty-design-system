@@ -1,6 +1,6 @@
 ---
 name: witty-lessons
-description: Compose a complete Witty lesson as one HTML artifact using the hosted Witty design system runtime (components, tokens, fonts, assets) served via jsDelivr from github.com/bespeakbv/witty-design-system. Triggers when the user asks to create a Witty-les, les-HTML, lesson with Witty bouwblokken, onderwijsles in Witty, etc. Produces a single self-standing HTML artifact that loads shared React bouwblokken over CDN.
+description: Compose a complete Witty lesson as one HTML artifact using the hosted Witty design system runtime (components, tokens, fonts, assets) served via jsDelivr from github.com/bespeakbv/witty-design-system. Triggers when the user asks to create a Witty-les, les-HTML, lesson with Witty bouwblokken, onderwijsles in Witty, etc. Produces a single self-standing HTML artifact that loads shared React bouwblokken over CDN. Bevat ook een sectie "Variant: bouwen direct in de Bespeak LCMS" voor wanneer de gebruiker vraagt de les **in het CMS** te bouwen — dan via `dev-browser --connect` UI-automatisering ipv artifact.
 ---
 
 # Witty Lessons — claude.ai artifact variant
@@ -201,6 +201,13 @@ Minimaal 2 items. Placeholder asset mag herhaald met verschillende alt.
     links:  WITTY_ASSETS["avatar-annemarie"],
     rechts: WITTY_ASSETS["avatar-michel"]
   },
+  // Personen-namen — gerenderd door Chat.js bij berichten, en gebruikt door
+  // de CMS-export. Verzin altijd realistische voornaam + achternaam (zie NL
+  // taal & copy-regels). Volgorde: index 0 = links, index 1 = rechts.
+  personen: [
+    { naam: "Anna de Vries", positie: "links"  },
+    { naam: "Tom Bakker",    positie: "rechts" }
+  ],
   berichten: [
     { auteur: "rechts", tekst: "…" },
     { auteur: "links",  tekst: "…" },
@@ -463,12 +470,26 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
     }
     .tweaks-toggle:hover { background: var(--neutral-50); }
     body.tweaks-on .tweaks-toggle { background: var(--teal-600); color: #fff; border-color: var(--teal-600); }
+
+    /* CMS export button — copies stripped blocks JSON to clipboard for the Witty bookmarklet. */
+    .cms-export {
+      position: fixed; left: 138px; bottom: 16px; z-index: 1000;
+      font-family: var(--font-body); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.02em; padding: 8px 14px; border-radius: 999px;
+      border: 1px solid var(--neutral-200); background: #fff; color: var(--ink);
+      cursor: pointer; box-shadow: 0 2px 8px rgba(16,24,40,0.08);
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+    }
+    .cms-export:hover { background: var(--neutral-50); }
+    .cms-export.cms-export--ok { background: var(--teal-600); color: #fff; border-color: var(--teal-600); }
+    .cms-export.cms-export--err { background: #c0392b; color: #fff; border-color: #c0392b; }
   </style>
 </head>
 <body>
   <div id="root" class="page"></div>
   <div class="tweaks" id="tweaks-panel"></div>
   <button type="button" id="tweaks-toggle" class="tweaks-toggle" aria-pressed="false">Tweaks aan</button>
+  <button type="button" id="cms-export" class="cms-export" title="Kopieer blocks-JSON voor de Witty CMS bookmarklet">Exporteer voor CMS</button>
   <script>
     (function () {
       var btn = document.getElementById("tweaks-toggle");
@@ -483,6 +504,102 @@ Produceer dit als je artifact met MIME `text/html`. Vervang `<!-- lestitel -->` 
       });
       new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ["class"] });
       sync();
+    })();
+  </script>
+  <script>
+    // CMS export — strip artifact-only data and runtime URIs, then copy clean blocks
+    // JSON to clipboard. The Witty CMS bookmarklet picks it up on the LCMS-tab.
+    (function () {
+      var btn = document.getElementById("cms-export");
+      if (!btn) return;
+
+      // Drop artifact-only fields and replace data:/blob: URIs with null
+      // (CMS expects assetId UUIDs; user uploads images manually after import).
+      function stripValue(v) {
+        if (typeof v === "string") {
+          if (v.startsWith("data:") || v.startsWith("blob:") || v.indexOf("claudeusercontent.com") !== -1) return null;
+          return v;
+        }
+        if (Array.isArray(v)) return v.map(stripValue);
+        if (v && typeof v === "object") {
+          var out = {};
+          for (var k in v) {
+            if (k === "id" || k === "naam") continue;  // artifact-only display fields
+            out[k] = stripValue(v[k]);
+          }
+          return out;
+        }
+        return v;
+      }
+
+      // Per-kind remap from artifact-shape to CMS-builder-shape.
+      function remapBlock(b) {
+        var s = stripValue(b);
+        if (s.kind === "external-link") {
+          return {
+            kind: "link",
+            achtergrond: s.achtergrond,
+            titel: s.titel,
+            instructie: s.body,
+            url: s.href,
+            linkLabel: s.linkTekst,
+          };
+        }
+        if (s.kind === "media-carousel") {
+          return null;  // skipped — CMS Media is single-asset, not a carousel
+        }
+        if (s.kind === "chat") {
+          // Build map auteur ("links"/"rechts") → persoonIndex.
+          // Prefer authored personen[] (with names) when present, else fallback to
+          // ordering by first-seen auteur in berichten with default names.
+          var seen = {};
+          var personen = [];
+          if (Array.isArray(s.personen) && s.personen.length) {
+            s.personen.forEach(function (p, i) {
+              personen.push({ naam: p.naam || ("Persoon " + (i + 1)), positie: p.positie });
+              if (p.positie) seen[p.positie] = i;
+            });
+          }
+          (s.berichten || []).forEach(function (m) {
+            if (!(m.auteur in seen)) {
+              seen[m.auteur] = personen.length;
+              personen.push({ naam: "Persoon " + (personen.length + 1), positie: m.auteur });
+            }
+          });
+          return {
+            kind: "chat",
+            achtergrond: s.achtergrond,
+            personen: personen,
+            berichten: (s.berichten || []).map(function (m) {
+              return { tekst: m.tekst, titel: m.titel, persoonIndex: seen[m.auteur] };
+            }),
+          };
+        }
+        return s;
+      }
+
+      btn.addEventListener("click", async function () {
+        var origText = btn.textContent;
+        try {
+          var blocks = (window.TWEAK_DEFAULTS && window.TWEAK_DEFAULTS.blocks) || [];
+          var skipped = 0;
+          var mapped = blocks.map(remapBlock).filter(function (b) {
+            if (b === null) { skipped++; return false; }
+            return true;
+          });
+          var payload = JSON.stringify({ blocks: mapped }, null, 2);
+          await navigator.clipboard.writeText(payload);
+          btn.classList.add("cms-export--ok");
+          btn.textContent = "✓ " + mapped.length + " blokken gekopieerd" + (skipped ? " (" + skipped + " overgeslagen)" : "");
+        } catch (e) {
+          btn.classList.add("cms-export--err");
+          btn.textContent = "✗ " + (e.message || "Fout");
+        }
+        setTimeout(function () {
+          btn.classList.remove("cms-export--ok", "cms-export--err");
+          btn.textContent = origText;
+        }, 2500);
+      });
     })();
   </script>
 
@@ -572,3 +689,35 @@ Standaard is het paneel uit bij opening (gebruiker klikt "Tweaks aan"). Wil de g
 ```
 
 De timeout wacht op React-mount. Alleen toevoegen als gebruiker expliciet vraagt.
+
+---
+
+## CMS-variant: aparte skill
+
+Wil de gebruiker de les **direct in de Bespeak LCMS** opslaan ("in cms", "in lcms", "voeg blok toe in cms")? Dat is een ander pad: één GraphQL save-mutation via `__APOLLO_CLIENT__.mutate()`, geen artifact. Zie [`witty-lessons-cms`](../witty-lessons-cms/SKILL.md) — zelfde block-shape, andere uitvoering.
+
+Triggers voor déze (artifact-)skill blijven: "een witty-les", "les met witty", "les-HTML". Voor CMS-mutaties switcht Claude naar de andere skill.
+
+## Exporteer-naar-CMS knop (claude.ai → bookmarklet → LCMS)
+
+Naast de Tweaks-toggle staat een **"Exporteer voor CMS"** knop. Workflow voor wie de les in claude.ai ontwerpt en daarna naar het CMS wil overhevelen zonder Claude Code:
+
+1. In claude.ai: speel met de tweaks, copy, layout
+2. Klik **Exporteer voor CMS** → blocks-JSON staat op het clipboard (data: URIs zijn vervangen door `null`, want het CMS verwacht assetId-UUIDs en de gebruiker uploadt afbeeldingen handmatig na import)
+3. Switch naar de open LCMS-tab op de juiste building-blocks-pagina
+4. Klik de **Witty CMS Import** bookmarklet (eenmalig drag-and-drop in bookmarks bar — zie `witty-lessons-cms/cms-api/bookmarklet-url.txt`)
+5. Confirm-dialog "X blokken vervangen Y bestaande" → OK → toast "✓ N blokken opgeslagen"
+6. Refresh + handmatig afbeeldingen uploaden waar nodig
+
+De bookmarklet bypasses CSP (Chrome behandelt `javascript:` URLs als user-initiated) en gebruikt cookies van de open LCMS-sessie voor auth — geen network-config nodig.
+
+### Wat de export-knop wegstript
+
+- `id`, `naam` (artifact-only display velden)
+- `data:` / `blob:` / `claudeusercontent.com` URIs (assetId blijft null)
+- `media-carousel` blokken (geen 1-op-1 CMS-equivalent, worden overgeslagen met "(N overgeslagen)" in de toast)
+
+### Wat de export-knop remapt
+
+- `external-link` (artifact) → `link` (CMS): `linkTekst` → `linkLabel`, `href` → `url`, `body` → `instructie`
+- `chat`: `avatars: {links, rechts}` + `berichten[].auteur` → `personen: [...]` + `berichten[].persoonIndex`
