@@ -104,15 +104,15 @@ jsDelivr's range-tags (`@1`, `@latest`) hebben een edge-cache die niet altijd di
 **Regel**: pin de versie. Vóór de artifact-generatie: doe één WebFetch om de huidige laatste versie op te halen, en vervang `{{WDS_VERSION}}` overal in het skeleton door die waarde.
 
 ```
-WebFetch("https://data.jsdelivr.com/v1/package/npm/witty-design-system")
-→ {"tags":{"latest":"1.0.7"},"versions":["1.0.7","1.0.6", ...]}
+WebFetch("https://cdn.jsdelivr.net/npm/witty-design-system/package.json")
+→ {"name":"witty-design-system","version":"1.0.8", ...}
 ```
 
-Gebruik `tags.latest` (bv. `1.0.7`) als `{{WDS_VERSION}}`. Eén identieke waarde voor alle URLs in het artifact.
+Gebruik het `version`-veld (bv. `1.0.8`) als `{{WDS_VERSION}}`. Eén identieke waarde voor alle URLs in het artifact.
 
-Waarom dit endpoint en niet `registry.npmjs.org`? claude.ai's WebFetch heeft een trusted-host-whitelist; jsDelivr-subdomeinen vallen daar binnen (artifacts fetchen al `cdn.jsdelivr.net`), maar `registry.npmjs.org` wordt soms geblokkeerd.
+Waarom **dit** endpoint? claude.ai's WebFetch deelt een trusted-host-whitelist met artifact's `connect-src` CSP. `cdn.jsdelivr.net` is whitelisted (artifacts laden er sowieso scripts vandaan). `data.jsdelivr.com` en `registry.npmjs.org` zijn **niet** whitelisted — die geven "Failed to fetch". jsDelivr serveert `package.json` zonder versie-pin door automatisch te resolveren naar latest, dus dit werkt als een lookup-endpoint.
 
-Lukt de lookup alsnog niet? Gebruik `1.0.7` als fallback en meld dat tegen de gebruiker. Beter een werkende, mogelijk-iets-oudere versie dan een gebroken artifact.
+Lukt de lookup alsnog niet? Gebruik `1.0.8` als fallback en meld dat tegen de gebruiker.
 
 ## Images: gebruik `WITTY_ASSETS[...]`, nooit directe URLs
 
@@ -582,7 +582,7 @@ Na het artifact: korte chat-response met:
 - **`<div id="root">` MOET in de body staan** — letterlijk `<div id="root" class="page"></div>` direct in `<body>`. `app-main.js` doet `createRoot(document.getElementById('root'))` en faalt met `Target container is not a DOM element` als die div ontbreekt. Niet hernoemen, niet weglaten, niet inwikkelen.
 - **Skeleton volgorde is verplicht** — body bevat in deze exacte volgorde: `#root` div, `#tweaks-panel` div, `#tweaks-toggle` button, `#cms-export` button, scripts. `assets.js` vóór `TWEAK_DEFAULTS`-script vóór React-scripts vóór `app-*.js`. Volgorde aanpassen breekt de mount.
 - **Relatieve paden breken** — alle `src`/`href` in de artifact moeten absolute `https://cdn.jsdelivr.net/npm/witty-design-system@{{WDS_VERSION}}/...` URLs zijn.
-- **`{{WDS_VERSION}}` placeholder MOET vervangen** — vóór generatie WebFetch op `https://data.jsdelivr.com/v1/package/npm/witty-design-system`, pak `tags.latest` (bv. `1.0.7`), vervang elke `{{WDS_VERSION}}` in skeleton door die waarde. Eén waarde voor alle URLs. Niet vervangen of fout pinnen = jsDelivr range-tag-cache levert oude `.js` versies en nieuwe features (chat-namen, fixes) zijn onzichtbaar. Lookup faalt? Fallback naar `1.0.7` en meld het.
+- **`{{WDS_VERSION}}` placeholder MOET vervangen** — vóór generatie WebFetch op `https://cdn.jsdelivr.net/npm/witty-design-system/package.json`, pak `version` (bv. `1.0.8`), vervang elke `{{WDS_VERSION}}` in skeleton door die waarde. Eén waarde voor alle URLs. Niet vervangen of fout pinnen = jsDelivr range-tag-cache levert oude `.js` versies en nieuwe features zijn onzichtbaar. Lookup faalt? Fallback naar `1.0.8` en meld het. Gebruik **niet** `data.jsdelivr.com` of `registry.npmjs.org` — die zitten niet in claude.ai's WebFetch-whitelist.
 - **`VraagConnect.paren` ≠ `opties`** — andere prop-naam, index bepaalt match.
 - **Geen `type="module"` of `type="text/babel"`** — scripts zijn pre-compiled `.js` (esbuild output). Plain `<script src="…">` is correct. Niet veranderen.
 - **Blok zonder `id` of `kind`** — wordt genegeerd of crasht. Altijd beide meegeven.
